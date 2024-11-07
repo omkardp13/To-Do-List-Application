@@ -1,13 +1,14 @@
 # ASP.NET Core (.NET Framework)
 # Build and test ASP.NET Core projects targeting the full .NET Framework.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+# Documentation for pipeline tasks: https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
 trigger:
-- Azure-Pipelines
+  branches:
+    include:
+      - Azure-Pipelines # Specify your main branch or modify as needed
 
 pool:
-  vmImage: 'windows-latest'
+  name: SelfHostHP # Self-hosted agent pool
 
 variables:
   solution: '**/*.sln'
@@ -15,20 +16,36 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+# Step 1: Install NuGet tool (if not already available in the agent)
 - task: NuGetToolInstaller@1
+  displayName: 'Install NuGet'
 
+# Step 2: Restore NuGet packages for the solution
 - task: NuGetCommand@2
+  displayName: 'Restore NuGet Packages'
   inputs:
     restoreSolution: '$(solution)'
 
+# Step 3: Build the solution using Visual Studio Build
 - task: VSBuild@1
+  displayName: 'Build Solution'
   inputs:
     solution: '$(solution)'
     msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# Step 4: Run tests for the solution
 - task: VSTest@2
+  displayName: 'Run Tests'
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
+
+# Step 5: Publish artifacts (Optional)
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifacts'
+  inputs:
+    Pathtopublish: '$(build.artifactStagingDirectory)' # Directory with built artifacts
+    ArtifactName: 'drop' # Name for the artifact in Azure DevOps
+    publishLocation: 'Container'
