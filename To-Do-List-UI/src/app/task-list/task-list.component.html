@@ -1,0 +1,25 @@
+<div class="container mt-5 mb-5">
+ 
+  <div *ngIf="!showTaskForm" class="container mt-4">
+    <div *ngIf="tasks.length > 0; ">
+      <ul class="list-group">
+        <li *ngFor="let task of tasks" class="list-group-item d-flex justify-content-between">
+          <span>{{ task.title }}</span> 
+
+        
+          <button (click)="editTask(task)" class="btn btn-sm btn-info">Edit</button>
+          
+         
+          <button (click)="deleteTask(task.taskId)" class="btn btn-sm btn-danger">Delete</button>
+        </li>
+      </ul>
+      <button (click)="addNewTask()" class="btn btn-sm btn-info mt-3">Add Task</button>
+    </div>
+   
+ 
+</div>
+  
+  <div *ngIf="showTaskForm" class="mt-4">
+    <app-task-form [task]="selectedTask" (save)="onSaveTask($event)"></app-task-form>
+  </div>
+</div>
