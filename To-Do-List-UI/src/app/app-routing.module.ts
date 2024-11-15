@@ -4,13 +4,21 @@ import { RegisterComponentComponent } from './register-component/register-compon
 import { TaskFormComponent } from './task-form/task-form.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { LoginComponentComponent } from './login-component/login-component.component';
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
-   // Default route shows task list
+  
    {path:'taskform',component:TaskListComponent},
-  { path: 'add-task', component: TaskFormComponent }, // Route to add task form
+  { path: 'add-task', component: TaskFormComponent }, 
   { path: 'edit-task/:id', component: TaskFormComponent },
-   // Route to edit task
+  {path:'register',component:RegisterComponentComponent},
+  {
+    path:'login',component:LoginComponentComponent
+  },
+  {
+    path:'home',component:HomeComponent
+  }
+ 
 ];
 
 

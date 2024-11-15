@@ -14,8 +14,10 @@ export class LoginComponentComponent {
   loginForm: FormGroup;
   submitted = false;
 
-     constructor(private formBuilder: FormBuilder,private userService:UserAccountService,private router:Router)
+     constructor(private formBuilder: FormBuilder,public userService:UserAccountService,private router:Router)
      {
+      this.userService.registerMode=false;
+      
       this.loginForm = this.formBuilder.group({
         username: ['', Validators.required],
         password: ['', [Validators.required, Validators.required]]
@@ -43,8 +45,7 @@ onSubmit()
           this.isLoggenIn = true;
           this.router.navigateByUrl('/taskform')
           
-        },
-       
+        },      
         
       });
     }
@@ -52,7 +53,8 @@ onSubmit()
 
 logout() {
   this.isLoggenIn = false;
-  this.userService.logout();
- 
+  this.userService.logout(); 
+  this.router.navigateByUrl('/home');
 }
+
 }

@@ -63,7 +63,12 @@ namespace To_Do_List_API.Controllers
 
             //Map Domain model to DTO
 
-            var responseDto = new UserDto
+
+            if(result ==null)
+            {
+                return null;
+            }
+             var responseDto = new UserDto
             {
                 UserName = response.UserName,
                 Email = response.Email,

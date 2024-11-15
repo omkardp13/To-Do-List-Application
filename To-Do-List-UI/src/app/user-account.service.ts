@@ -12,10 +12,11 @@ export class UserAccountService {
 
   constructor(private http:HttpClient) { }
 
+  registerMode:boolean=false;
 
  login(user:any):Observable<void>
  {
- 
+    this.registerMode=false;
     return this.http.post<User>('https://localhost:7164/api/Users/login', user).pipe(
       map((response:User)=>
       {
@@ -37,7 +38,7 @@ export class UserAccountService {
     
   }
 
-   currentUser()
+   public currentUser()
    {
     const user = localStorage.getItem('user');
     if (user) {
@@ -61,11 +62,12 @@ export class UserAccountService {
   logout()
   {
     localStorage.removeItem('user');
-    
+    this.registerMode=true; 
    
   }
 
-  register(user: any): Observable<any> {   
+  register(user: any): Observable<any> {  
+    this.registerMode=false; 
     return this.http.post<User>('https://localhost:7164/api/Users', user);
   }
   

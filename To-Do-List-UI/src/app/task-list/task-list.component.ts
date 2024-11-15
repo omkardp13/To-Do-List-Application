@@ -24,7 +24,7 @@ export class TaskListComponent implements OnInit {
     createdAt: new Date()
   };
 
-  constructor(private taskService: TaskService,private userAccount:UserAccountService)
+  constructor(private taskService: TaskService,private userAccount:UserAccountService,public userService:UserAccountService)
    {
     this.userAccount.getCurrentUser().subscribe(user => {
       this.currentUser = user;

@@ -31,7 +31,7 @@ namespace ToDoListAPI.Controllers
 
 
 
-        // GET: api/tasks/5
+       
         [HttpGet("{id}")]
         public async Task<ActionResult<Tasks>> GetTask(int id)
         {
@@ -43,7 +43,7 @@ namespace ToDoListAPI.Controllers
             return Ok(task);
         }
 
-        // POST: api/tasks
+        
         [HttpPost]
         public async Task<ActionResult<Tasks>> CreateTask([FromBody] Tasks task)
         {
@@ -54,19 +54,19 @@ namespace ToDoListAPI.Controllers
 
             var newTask = new Tasks
             {
-                UserId = task.UserId, // Set to an existing UserId
+                UserId = task.UserId, 
                 Title = task.Title,
                 Description = task.Description,
             };
 
-            //var createdTask = await CreateTask(newTask);
+            
 
 
             var createdTask = await _taskService.CreateTask(newTask);
             return CreatedAtAction(nameof(GetTask), new { id = createdTask.TaskId }, createdTask);
         }
 
-        // PUT: api/tasks/5
+        
         [HttpPut("{id}")]
         public async Task<ActionResult<Tasks>> UpdateTask(int id, [FromBody] Tasks task)
         {
@@ -84,7 +84,7 @@ namespace ToDoListAPI.Controllers
             return Ok(updatedTask);
         }
 
-        // DELETE: api/tasks/5
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(int id)
         {

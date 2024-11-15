@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/User';
 import { UserAccountService } from '../user-account.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-component',
@@ -14,7 +15,7 @@ export class RegisterComponentComponent {
   registerForm: FormGroup;
   submitted = false;
 
-  constructor(private formBuilder: FormBuilder,private userService:UserAccountService) {
+  constructor(private formBuilder: FormBuilder,private userService:UserAccountService,private router:Router) {
 
     
 
@@ -67,8 +68,9 @@ export class RegisterComponentComponent {
 
       this.userService.register(registerData).subscribe({
         next: () => {
+          this.router.navigateByUrl('login');
         },
-       
+         
       });
     }
   }

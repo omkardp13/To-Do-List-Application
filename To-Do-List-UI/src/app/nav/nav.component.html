@@ -1,0 +1,20 @@
+<nav class="navbar navbar-expand-md navbar my">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">To-Do App</a>
+
+    <div class="dropdown">
+      <a class="nav-link dropdown-toggle text-light text-decoration-none" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Welcome
+      </a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+        <div *ngIf="userService.currentUser()">
+        <li><a class="dropdown-item" (click)="logout()">Logout</a></li>
+      </div>
+      <div *ngIf="!userService.currentUser()">
+        <li><a class="dropdown-item" routerLink="/login">Login</a></li>
+       
+      </div>
+      </ul>
+    </div>
+  </div>
+</nav>

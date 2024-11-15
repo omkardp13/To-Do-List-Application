@@ -10,6 +10,8 @@ import { LoginComponentComponent } from './login-component/login-component.compo
 
 import { TaskFormComponent } from './task-form/task-form.component';
 import { TaskListComponent } from './task-list/task-list.component';
+import { NavComponent } from './nav/nav.component';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { TaskListComponent } from './task-list/task-list.component';
     RegisterComponentComponent,
     LoginComponentComponent,
     TaskFormComponent,
-    TaskListComponent
+    TaskListComponent,
+    NavComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
