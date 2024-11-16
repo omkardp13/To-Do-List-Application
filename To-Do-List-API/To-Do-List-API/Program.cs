@@ -1,3 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using To_Do_List_API.Database;
+using To_Do_List_API.Repository.Implementation;
+using To_Do_List_API.Repository.Interface;
+using To_Do_List_API.Services.Interfaces;
+using ToDoListAPI.Services;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +14,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ToDoConnectionString"))
+);
+
+
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+builder.Services.AddScoped<ITaskService, TaskService>();
+
 
 var app = builder.Build();
 
@@ -17,6 +36,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+});
+
 
 app.UseAuthorization();
 
