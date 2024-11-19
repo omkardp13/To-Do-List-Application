@@ -1,21 +1,69 @@
 <div class="container mt-5 mb-5">
- 
-  <div *ngIf="!showTaskForm && userService.currentUser()" class="container mt-4">
-    <div *ngIf="tasks.length > 0; ">
-      <ul class="list-group">
-        <li *ngFor="let task of tasks" class="list-group-item d-flex justify-content-between">
-          <span>{{ task.title }}</span> 
-        
-          <button (click)="editTask(task)" class="btn btn-sm btn-info">Edit</button>
-            
-          <button (click)="deleteTask(task.taskId)" class="btn btn-sm btn-danger">Delete</button>
+
+  <div class="d-flex justify-content-center align-items-center mb-4">
+    <label class="col-form-label me-2">Show:</label>
+    <select
+      [(ngModel)]="selectedFilter"
+      (change)="applyFilters()"
+      class="form-select"
+      style="width: 130px;"
+    >
+      <option value="completed">Completed Tasks</option>
+      <option value="pending">Pending Tasks</option>
+      <option value="all">All Tasks</option>
+    </select>
+    <button (click)="resetFilters()" class="btn btn-info ms-3" type="button">Reset Filters</button>
+
+  </div>
+
+  <div class="d-flex justify-content-center align-items-center">
+    <input
+      [(ngModel)]="searchQuery"
+      (input)="applyFilters()"
+      class="form-control"
+      placeholder="Search by title"
+      style="width: 300px;"
+    />
+  </div>
+
+
+  <!-- Task Lists -->
+  <div *ngIf="!showTaskForm && currentUser" class="container">
+    <!-- Pending or All Tasks -->
+    <div *ngIf="selectedFilter !== 'completed'">
+      <h2 class="text-center text-secondary">
+        {{ selectedFilter === 'pending' ? 'Pending Tasks' : 'All Tasks' }}
+      </h2>
+      <ul *ngIf="filteredTasks.length > 0" class="list-group">
+        <li *ngFor="let task of filteredTasks" class="list-group-item d-flex justify-content-between">
+          <span>{{ task.title }}</span>
+          <div>
+            <button (click)="editTask(task)" class="btn btn-sm btn-info me-2">Edit</button>
+            <button (click)="deleteTask(task.taskId)" class="btn btn-sm btn-danger">Delete</button>
+          </div>
         </li>
       </ul>
+      <p *ngIf="filteredTasks.length === 0" class="text-center text-muted">No tasks found.</p>
     </div>
-    <button (click)="addNewTask()" class="btn btn-sm btn-info mt-3">Add Task</button>
-   
-</div>
-  
+
+    <!-- Completed Tasks -->
+    <div *ngIf="selectedFilter === 'completed'">
+      <h2 class="text-center text-secondary">Completed Tasks</h2>
+      <ul *ngIf="filteredTasks.length > 0" class="list-group">
+        <li *ngFor="let task of filteredTasks" class="list-group-item">
+          <span>{{ task.title }}</span>
+        </li>
+      </ul>
+      <p *ngIf="filteredTasks.length === 0" class="text-center text-muted">No completed tasks.</p>
+    </div>
+
+    <!-- Add Task Button -->
+    <div class="text-center mt-4">
+      <button (click)="addNewTask()" class="btn btn-info">Add Task</button>
+    </div>
+  </div>
+
+  <!-- Task Form -->
   <div *ngIf="showTaskForm" class="mt-4">
     <app-task-form [task]="selectedTask" (save)="onSaveTask($event)"></app-task-form>
   </div>

@@ -1,6 +1,6 @@
 <div class="container mt-4">
     <div class="card">
-      <div class="card-header">
+      <div class="text-center card-header">
         <h5>{{ task.taskId ? 'Edit Task' : 'Add New Task' }}</h5>
       </div>
       <div class="card-body">
@@ -52,8 +52,7 @@
             <label for="isCompleted" class="form-check-label">Mark as Completed</label>
           </div>
   
-      
-          <div class="d-flex justify-content-end">
+          <div class="text-center">
             <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">
               {{ task.taskId ? 'Update Task' : 'Add Task' }}
             </button>

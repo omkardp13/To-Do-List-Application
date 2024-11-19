@@ -21,10 +21,7 @@ export class HomeComponent implements OnInit {
    }
  
   registerMode=false;
-  
-
- 
- 
+   
   cancelRegisterMode(event:boolean)
   {
        this.registerMode=event;
@@ -35,6 +32,5 @@ export class HomeComponent implements OnInit {
     this.userService.registerMode=!this.userService.registerMode
     this.router.navigateByUrl('/register');
   }
-
 
 }

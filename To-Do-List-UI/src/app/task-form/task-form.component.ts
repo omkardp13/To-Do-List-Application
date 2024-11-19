@@ -19,6 +19,7 @@ export class TaskFormComponent {
   @Output() save = new EventEmitter<Task>();
 
   onSubmit() {
+
     this.save.emit(this.task);
   }
 }

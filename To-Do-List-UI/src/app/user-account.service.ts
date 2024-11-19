@@ -57,8 +57,6 @@ export class UserAccountService {
   }
   
   
-
-
   logout()
   {
     localStorage.removeItem('user');

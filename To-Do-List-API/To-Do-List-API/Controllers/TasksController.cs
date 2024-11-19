@@ -57,6 +57,7 @@ namespace ToDoListAPI.Controllers
                 UserId = task.UserId, 
                 Title = task.Title,
                 Description = task.Description,
+                IsCompleted=task.IsCompleted
             };
 
             
