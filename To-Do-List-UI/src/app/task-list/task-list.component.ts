@@ -15,6 +15,10 @@ export class TaskListComponent implements OnInit {
   selectedFilter: string = 'all';  
   searchQuery: string = ''; 
 
+  paginatedTasks : Task[]=[];
+  currentPage = 1;
+  tasksPerPage = 5;
+
   currentUser: User | null = null;
   tasks: Task[] = [];
   showTaskForm: boolean = false;
@@ -27,8 +31,8 @@ export class TaskListComponent implements OnInit {
     createdAt: new Date()
   };
 
-  constructor(private taskService: TaskService, private userAccount: UserAccountService) {
-    // Get the current user
+  constructor(private taskService: TaskService, public userAccount: UserAccountService) {
+    
     this.userAccount.getCurrentUser().subscribe(user => {
       this.currentUser = user;
     });
@@ -40,13 +44,27 @@ export class TaskListComponent implements OnInit {
   }
 
   loadTasks(): void {
-    // Load tasks only if current user is available
+    
     if (this.currentUser?.userId) {  
       this.taskService.getTasks(this.currentUser.userId).subscribe((tasks) => {
         this.tasks = tasks;
-        this.applyFilters();  // Apply filters and search after loading tasks
+        this.applyFilters(); 
       });
     }
+  }
+
+  updatePaginatedTasks() {
+    const startIndex = (this.currentPage - 1) * this.tasksPerPage;
+    const endIndex = startIndex + this.tasksPerPage;
+    this.paginatedTasks = this.filteredTasks.slice(startIndex, endIndex);
+  }
+
+  changePage(newPage: number) {
+    this.currentPage = newPage;
+    this.updatePaginatedTasks();
+  }
+  getTotalPages(): number {
+    return Math.ceil(this.filteredTasks.length / this.tasksPerPage);
   }
 
   addNewTask(): void {
@@ -63,19 +81,20 @@ export class TaskListComponent implements OnInit {
 
   resetFilters(): void {
     this.selectedFilter = 'all';
-    this.searchQuery = '';  // Reset search query as well
-    this.applyFilters();  // Reapply filters after reset
+    this.searchQuery = '';  
+    this.currentPage = 1;
+    this.applyFilters();  
   }
 
   deleteTask(taskId: number): void {
     this.taskService.deleteTask(taskId).subscribe(() => {
       this.tasks = this.tasks.filter(task => task.taskId !== taskId);
-      this.applyFilters();  // Reapply filters after deleting a task
+      this.applyFilters();  
     });
   }
 
   editTask(task: Task): void {
-    this.selectedTask = { ...task };  // Clone the task to avoid direct mutations
+    this.selectedTask = { ...task }; 
     this.showTaskForm = true;
   }
 
@@ -84,12 +103,12 @@ export class TaskListComponent implements OnInit {
       task.userId = this.currentUser.userId;
     }
     
-    // Check if the task is being updated or newly added
+   
     if (task.taskId !== 0) {
       this.taskService.updateTask(task.taskId, task).subscribe((updatedTask) => {
         const index = this.tasks.findIndex(t => t.taskId === updatedTask.taskId);
         if (index > -1) {
-          this.tasks[index] = updatedTask;  // Update the task in the list
+          this.tasks[index] = updatedTask; 
         }
         this.showTaskForm = false;
         this.applyFilters();  // Reapply filters after saving
@@ -104,16 +123,18 @@ export class TaskListComponent implements OnInit {
   }
 
   applyFilters(): void {
-    // Filter tasks based on search query and task status (all, completed, pending)
+   
     this.filteredTasks = this.tasks
-      .filter(task => task.title.toLowerCase().includes(this.searchQuery.toLowerCase()))  // Filter by title
+      .filter(task => task.title.toLowerCase().includes(this.searchQuery.toLowerCase())) 
       .filter(task => {
         if (this.selectedFilter === 'completed') {
           return task.isCompleted;
         } else if (this.selectedFilter === 'pending') {
           return !task.isCompleted;
         }
-        return true;  // Show all tasks if 'all' is selected
+        return true; 
       });
+
+      this.updatePaginatedTasks();
   }
 }

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using To_Do_List_API.Models.Domain;
 using To_Do_List_API.Models.DTOs;
 using To_Do_List_API.Repository.Interface;
+using To_Do_List_API.Services.Implementation;
+using To_Do_List_API.Services.Interfaces;
 
 namespace To_Do_List_API.Controllers
 {
@@ -13,15 +15,16 @@ namespace To_Do_List_API.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserRepository userRepository;
-        public UsersController(IUserRepository _userRepository)
+        private readonly ITokenService tokenService;
+        public UsersController(IUserRepository _userRepository,ITokenService _tokenService)
         {
             this.userRepository = _userRepository;
+            this.tokenService = _tokenService;
         }
 
 
         [HttpPost]
         [Route("login")]
-
         public async Task<ActionResult<UserDto>> Login([FromBody] UserLoginDto user)
         {
 
@@ -32,11 +35,14 @@ namespace To_Do_List_API.Controllers
                 return null;
             }
 
+            var token = tokenService.GenerateToken(response.UserName);
+
             var responseDto = new UserDto
             {
                 UserId=response.UserId,
                 UserName = response.UserName,
                 Email = response.Email,
+                Token=token,
             };
 
             return responseDto;

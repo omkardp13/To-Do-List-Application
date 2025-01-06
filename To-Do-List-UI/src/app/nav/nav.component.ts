@@ -21,7 +21,7 @@ export class NavComponent {
   logout() {
    // this.isLoggenIn = false;
     this.userService.logout(); 
-    this.router.navigateByUrl('/taskform');
+    this.router.navigateByUrl('/home');
   }
 
   

@@ -1,5 +1,6 @@
-<div class="container mt-5 mb-5">
-
+<div *ngIf="!showTaskForm && userAccount.currentUser()" class="container mt-4">
+  <div class="container mt-5 mb-5">
+  <!-- Filter and Search -->
   <div class="d-flex justify-content-center align-items-center mb-4">
     <label class="col-form-label me-2">Show:</label>
     <select
@@ -12,8 +13,13 @@
       <option value="pending">Pending Tasks</option>
       <option value="all">All Tasks</option>
     </select>
-    <button (click)="resetFilters()" class="btn btn-info ms-3" type="button">Reset Filters</button>
-
+    <button
+      (click)="resetFilters()"
+      class="btn btn-info ms-3"
+      type="button"
+    >
+      Reset Filters
+    </button>
   </div>
 
   <div class="d-flex justify-content-center align-items-center">
@@ -26,16 +32,15 @@
     />
   </div>
 
-
   <!-- Task Lists -->
-  <div *ngIf="!showTaskForm && currentUser" class="container">
-    <!-- Pending or All Tasks -->
-    <div *ngIf="selectedFilter !== 'completed'">
+ 
+    <!-- Tasks -->
+    <div>
       <h2 class="text-center text-secondary">
-        {{ selectedFilter === 'pending' ? 'Pending Tasks' : 'All Tasks' }}
+        {{ selectedFilter === 'completed' ? 'Completed Tasks' : selectedFilter === 'pending' ? 'Pending Tasks' : 'All Tasks' }}
       </h2>
-      <ul *ngIf="filteredTasks.length > 0" class="list-group">
-        <li *ngFor="let task of filteredTasks" class="list-group-item d-flex justify-content-between">
+      <ul *ngIf="paginatedTasks.length > 0" class="list-group">
+        <li *ngFor="let task of paginatedTasks" class="list-group-item d-flex justify-content-between">
           <span>{{ task.title }}</span>
           <div>
             <button (click)="editTask(task)" class="btn btn-sm btn-info me-2">Edit</button>
@@ -43,28 +48,34 @@
           </div>
         </li>
       </ul>
-      <p *ngIf="filteredTasks.length === 0" class="text-center text-muted">No tasks found.</p>
+      <p *ngIf="paginatedTasks.length === 0" class="text-center text-muted">No tasks found.</p>
     </div>
 
-    <!-- Completed Tasks -->
-    <div *ngIf="selectedFilter === 'completed'">
-      <h2 class="text-center text-secondary">Completed Tasks</h2>
-      <ul *ngIf="filteredTasks.length > 0" class="list-group">
-        <li *ngFor="let task of filteredTasks" class="list-group-item">
-          <span>{{ task.title }}</span>
-        </li>
-      </ul>
-      <p *ngIf="filteredTasks.length === 0" class="text-center text-muted">No completed tasks.</p>
-    </div>
-
-    <!-- Add Task Button -->
     <div class="text-center mt-4">
       <button (click)="addNewTask()" class="btn btn-info">Add Task</button>
+    <!-- Pagination Controls -->
+    <div class="d-flex justify-content-center align-items-center mt-4">
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="btn btn-outline-info me-2"
+      >
+        Previous
+      </button>
+      <span>Page {{ currentPage }} of {{ getTotalPages() }}</span>
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage === getTotalPages()"
+        class="btn btn-outline-info ms-2"
+      >
+        Next
+      </button>
     </div>
   </div>
-
-  <!-- Task Form -->
-  <div *ngIf="showTaskForm" class="mt-4">
-    <app-task-form [task]="selectedTask" (save)="onSaveTask($event)"></app-task-form>
-  </div>
+   <!-- Task Form -->
+   
+</div>
+</div>
+<div *ngIf="showTaskForm" class="mt-4">
+  <app-task-form [task]="selectedTask" (save)="onSaveTask($event)"></app-task-form>
 </div>

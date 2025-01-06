@@ -5,12 +5,13 @@ import { TaskFormComponent } from './task-form/task-form.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { LoginComponentComponent } from './login-component/login-component.component';
 import { HomeComponent } from './home/home.component';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   
-   {path:'taskform',component:TaskListComponent},
-  { path: 'add-task', component: TaskFormComponent }, 
-  { path: 'edit-task/:id', component: TaskFormComponent },
+   {path:'taskform',component:TaskListComponent,canActivate: [AuthGuard]},
+  { path: 'add-task', component: TaskFormComponent,canActivate: [AuthGuard] }, 
+  { path: 'edit-task/:id', component: TaskFormComponent,canActivate: [AuthGuard] },
   {path:'register',component:RegisterComponentComponent},
   {
     path:'login',component:LoginComponentComponent
@@ -18,7 +19,7 @@ const routes: Routes = [
   {
     path:'home',component:HomeComponent
   }
- 
+ ,
 ];
 
 

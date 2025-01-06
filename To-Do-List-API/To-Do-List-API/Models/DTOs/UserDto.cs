@@ -15,6 +15,8 @@ namespace To_Do_List_API.Models.DTOs
         [Required]
         [StringLength(255)]
         public string Email { get; set; } = string.Empty;
+
+        public string Token { get; set; }= string.Empty;
         
     }
 }

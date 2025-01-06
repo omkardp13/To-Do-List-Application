@@ -24,11 +24,26 @@ export class UserAccountService {
         if(user)
         {
           this.setCurrentUser(user);
+          this.saveToken(user.Token);
+          console.log("Hi"+user.Token);
         }
       }
       )
     );
  }
+
+saveToken(token: string) {
+  localStorage.setItem('token', token);
+}
+
+getToken(): string | null {
+  return localStorage.getItem('token');
+}
+
+removeToken()
+{
+  localStorage.removeItem('token');
+}
 
  setCurrentUser(user:User)
   {
@@ -60,6 +75,7 @@ export class UserAccountService {
   logout()
   {
     localStorage.removeItem('user');
+    this.removeToken();
     this.registerMode=true; 
    
   }

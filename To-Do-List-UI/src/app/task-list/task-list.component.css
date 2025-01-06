@@ -1,7 +1,9 @@
 .list-group {
     margin-top: 40px;
     /* Makes sure it's vertically centered */
+    margin-bottom: 25px;
   }
+
   
   .custom-width-btn {
     width: 200px; /* Set desired width */

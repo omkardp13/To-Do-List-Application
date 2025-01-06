@@ -4,4 +4,5 @@ export interface User
     UserName:string
     PasswordHash:string
     Email:string
+    Token:string
 }
